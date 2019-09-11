@@ -1,0 +1,10 @@
+description: both lint and test
+usage:
+  orbs:
+    golang: heroku/golang@volatile
+  version: 2.1
+  workflows:
+    ci:
+      jobs:
+        - golang/test
+        - golang/golangci-lint

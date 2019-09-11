@@ -1,0 +1,18 @@
+description: golangci-lint job
+executor:
+  name: golangci-lint
+  tag: << parameters.version >>
+parameters:
+  version:
+    description: version of golangci-lint to use (Defaults to v1.18; must be a valid docker golangci/golangci-lint tag)
+    type: string
+    default: v1.18
+  pkg-spec:
+    description: Spec of packages to test (defaults to ./...)
+    type: string
+    default: ./...
+steps:
+  - checkout
+  - run:
+      command: |
+        golangci-lint run << parameters.pkg-spec >>
