@@ -1,0 +1,111 @@
+version: 2.1
+
+description: |
+  Golangci-lint orb
+
+examples:
+  golangci:
+    description: Usage of heroku/golangci-lint orb
+    usage:
+      orbs:
+        golangci-lint: heroku/golangci-lint@volatile
+      version: 2.1
+      workflows:
+        build:
+          jobs:
+            - golangci-lint/lint
+
+commands:
+  golangci-lint:
+    description: Runs the goalngci-lint command
+    parameters:
+      attach-workspace:
+        default: false
+        description: |
+          Boolean for whether or not to attach to an existing workspace. Default is false.
+        type: boolean
+      checkout:
+        default: true
+        description: |
+          Boolean for whether or not to checkout as a first step. Default is true.
+        type: boolean
+      directories:
+        default: ./...
+        description: directory path list of the lint target
+        type: string
+      working-directory:
+        default: .
+        description: directory path for this job
+        type: string
+      workspace-root:
+        default: .
+        description: |
+          Workspace root path that is either an absolute path or a path relative to the working directory. Defaults to '.' (the working directory)
+        type: string
+    steps:
+      - when:
+          condition: << parameters.checkout >>
+          steps:
+            - checkout
+      - when:
+          condition: << parameters.attach-workspace >>
+          steps:
+            - attach_workspace:
+                at: << parameters.workspace-root >>
+      - run:
+          command: golangci-lint run << parameters.directories >>
+          name: Run goalngci-lint
+          working_directory: << parameters.working-directory >>
+executors:
+  golangci:
+    docker:
+      - image: golangci/golangci-lint:<< parameters.tag >>
+    parameters:
+      tag:
+        default: latest
+        description: tag of the docker image of `golangci/golangci-lint`
+        type: string
+    resource_class: small
+
+jobs:
+  lint:
+    description: |
+      Lint the Go project with golangci-lint
+    executor:
+      name: golangci
+      tag: << parameters.tag >>
+    parameters:
+      attach-workspace:
+        default: false
+        description: |
+          Boolean for whether or not to attach to an existing workspace. Default is false.
+        type: boolean
+      checkout:
+        default: true
+        description: |
+          Boolean for whether or not to checkout as a first step. Default is true.
+        type: boolean
+      directories:
+        default: ./...
+        description: directory path list of the lint target
+        type: string
+      tag:
+        default: latest
+        description: tag of the docker image of `golangci/golangci-lint`
+        type: string
+      working-directory:
+        default: .
+        description: directory path for this job
+        type: string
+      workspace-root:
+        default: .
+        description: |
+          Workspace root path that is either an absolute path or a path relative to the working directory. Defaults to '.' (the working directory)
+        type: string
+    steps:
+      - golangci-lint:
+          attach-workspace: << parameters.attach-workspace >>
+          checkout: << parameters.checkout >>
+          directories: <<parameters.directories>>
+          working-directory: <<parameters.working-directory>>
+          workspace-root: << parameters.workspace-root >>
