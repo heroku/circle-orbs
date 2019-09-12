@@ -8,3 +8,4 @@ usage:
       jobs:
         - golang/golangci-lint
         - golang/test
+        - golang/cover
