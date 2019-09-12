@@ -1,0 +1,14 @@
+description: |
+  execute go test
+  control the options by setting GO_TEST_OPTS in the environment
+parameters:
+  pkg-spec:
+    description: Spec of packages to test (defaults to ./...)
+    type: string
+    default: ./...
+  test-opts:
+    description: go test options (defaults to '-v -timeout 30s')
+    type: string
+    default: -v -timeout 30s
+steps:
+  - run: go test << parameters.test-opts >> << parameters.pkg-spec >>

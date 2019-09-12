@@ -1,4 +1,4 @@
-description: Go test job
+description: Code coverage
 executor:
   name: golang
   tag: << parameters.version >>
@@ -16,9 +16,9 @@ parameters:
     type: boolean
     default: true
   test-opts:
-    description: go test options (Defaults to -v -timeout 30s -race)
+    description: go test options (Defaults to '-coverprofile=coverage.txt -covermode=atomic -timeout 30s')
     type: string
-    default: -v -timeout 30s -race
+    default: -coverprofile=coverage.txt -covermode=atomic -timeout 30s
 steps:
   - checkout
   - when:
@@ -31,6 +31,15 @@ steps:
   - go-test:
       pkg-spec: << parameters.pkg-spec >>
       test-opts: << parameters.test-opts >>
+  - run:
+      command: |
+        go tool cover -html=coverage.txt -o coverage.html
+  - run:
+      command: |
+        mkdir -p /tmp/coverage
+        cp coverage.html /tmp/coverage
+  - store_artifacts:
+      path: /tmp/coverage
   - when:
       condition: << parameters.cache >>
       steps:

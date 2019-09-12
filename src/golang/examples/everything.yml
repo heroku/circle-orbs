@@ -6,5 +6,5 @@ usage:
   workflows:
     ci:
       jobs:
-        - golang/test
         - golang/golangci-lint
+        - golang/test
