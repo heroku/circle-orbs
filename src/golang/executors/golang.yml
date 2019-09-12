@@ -2,7 +2,7 @@ docker:
   - image: circleci/golang:<< parameters.tag >>
 parameters:
   tag:
-    description: tag of the circleci/golang docker image to use (Defaults to 1.13)
+    description: tag of the circleci/golang docker image to use (Defaults to 'latest')
     type: string
-    default: "1.13"
+    default: latest
 resource_class: medium

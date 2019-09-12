@@ -2,7 +2,7 @@ docker:
   - image: golangci/golangci-lint:<< parameters.tag >>
 parameters:
   tag:
-    description: tag of the `golangci/golangci-lint` docker image to use (Defaults to v1.18)
+    description: tag of the `golangci/golangci-lint` docker image to use (Defaults to 'latest')
     type: string
-    default: v1.18
+    default: latest
 resource_class: small

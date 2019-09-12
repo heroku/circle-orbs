@@ -1,18 +1,20 @@
-description: Code coverage
+description: |
+  Go code coverage (go test + go tool cover).
+  Produces html coverage output to /tmp/coverage, which is then archived.
 executor:
   name: golang
   tag: << parameters.version >>
 parameters:
   version:
-    description: version of golang to use (Defaults to 1.13; must be a valid docker circleci/golang tag)
+    description: version of golang to use (Defaults to 'latest'; must be a valid docker circleci/golang tag)
     type: string
-    default: "1.13"
+    default: latest
   pkg-spec:
-    description: Spec of packages to test (defaults to ./...)
+    description: Spec of packages to test (Defaults to './...')
     type: string
     default: ./...
   cache:
-    description: Use circle ci cache (defaults to true)
+    description: Use circle ci cache (Defaults to 'true')
     type: boolean
     default: true
   test-opts:

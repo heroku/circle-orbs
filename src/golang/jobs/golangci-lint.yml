@@ -4,15 +4,15 @@ executor:
   tag: << parameters.version >>
 parameters:
   version:
-    description: version of golangci-lint to use (Defaults to v1.18; must be a valid docker golangci/golangci-lint tag)
+    description: version of golangci-lint to use (Defaults to 'latest''; must be a valid docker golangci/golangci-lint tag)
     type: string
-    default: v1.18
+    default: latest
   pkg-spec:
-    description: Spec of packages to test (defaults to ./...)
+    description: Spec of packages to test (Defaults to './...')
     type: string
     default: ./...
   fix:
-    description: Add --fix
+    description: Add --fix (Defaults to 'false')
     type: boolean
     default: false
 steps:
