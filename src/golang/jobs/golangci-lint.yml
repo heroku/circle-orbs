@@ -11,8 +11,12 @@ parameters:
     description: Spec of packages to test (defaults to ./...)
     type: string
     default: ./...
+  fix:
+    description: Add --fix
+    type: boolean
+    default: false
 steps:
   - checkout
   - run:
       command: |
-        golangci-lint run << parameters.pkg-spec >>
+        golangci-lint run <<# parameters.fix >> --fix<</parameters.fix>> << parameters.pkg-spec >>
