@@ -1,0 +1,8 @@
+docker:
+  - image: migrate/migrate:<< parameters.tag >>
+parameters:
+  tag:
+    description: tag of the `migrate/migrate` docker image to use (Defaults to 'latest')
+    type: string
+    default: latest
+resource_class: small

@@ -1,0 +1,40 @@
+description: run golang-migrate/migrate cmd
+parameters:
+  command:
+    description: command to run ('up', 'down', etc)
+    type: string
+    default: up
+  migration-path:
+    description: path to the migration files
+    type: string
+    default: internal/db/migrations
+  version:
+    description: version of golang-migrate/migrate to install (Defaults to '4.6.2')
+    type: string
+    default: "4.6.2"
+  cache:
+    description: cache download (Defaults to true)
+    type: boolean
+    default: true
+steps:
+  - when:
+      condition: << parameters.cache >>
+      steps:
+        - restore_cache:
+            keys:
+              - cache-tools-golang-migrate-<<parameters.version>>
+  - run: |
+      if [ ! -x ".tools/migrate.linux-amd64-<<parameters.version>>" ]; then
+        mkdir -p .tools &&
+        rm -f .tools/migrate.linux-amd64* &&
+        curl -sSL https://github.com/golang-migrate/migrate/releases/download/v<< parameters.version>>/migrate.linux-amd64.tar.gz | tar zxf - -C .tools &&
+        mv .tools/migrate.linux-amd64 .tools/migrate.linux-amd64-<<parameters.version>>
+      fi &&
+      .tools/migrate.linux-amd64-<<parameters.version>> -database "${DATABASE_URL-"postgres:///test?sslmode=disable"}" -path << parameters.migration-path >> << parameters.command >>
+  - when:
+      condition: << parameters.cache >>
+      steps:
+        - save_cache:
+            key: cache-tools-golang-migrate-<<parameters.version>>
+            paths:
+              - ".tools/migrate.linux-amd64-<<parameters.version>>"

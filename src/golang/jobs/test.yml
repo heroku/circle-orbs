@@ -1,32 +1,65 @@
 description: Go test job
+
 executor:
-  name: golang
+  name: golang-with-dbs
   tag: << parameters.version >>
+  postgres-tag: << parameters.postgres-version >>
+  redis-tag: << parameters.redis-version >>
+
 parameters:
-  version:
-    description: version of golang to use (Defaults to 'latest'; must be a valid docker circleci/golang tag)
-    type: string
-    default: latest
-  pkg-spec:
-    description: Spec of packages to test (Defaults to './...')
-    type: string
-    default: ./...
   cache:
     description: Use circle ci cache (Defaults to 'true')
     type: boolean
     default: true
-  test-opts:
-    description: go test options (Defaults to '-v -timeout 30s -race')
-    type: string
-    default: -v -timeout 30s -race
   cover:
-    description: create and save coverage output
+    description: Controls the creation and saving of coverage output (Defaults to 'true')
     type: boolean
     default: true
   covermode:
     description: cover mode (Defaults to 'atomic')
     type: string
     default: atomic
+  install-postgresql-client:
+    description: controls installation of the postgresql-client package (Defaults to 'true')
+    type: boolean
+    default: true
+  install-redis-tools:
+    description: controls installation of the install-redis-tools package (Defaults to 'true')
+    type: boolean
+    default: true
+  migrate:
+    description: use golang-migrate/migrate tool to migrate database (Defaults to 'true')
+    type: boolean
+    default: true
+  migration-path:
+    description: location of golang-migrate migration files (Defaults to 'internal/db/migrations')
+    type: string
+    default: internal/db/migrations
+  migration-version:
+    description: version of golang-migrate/migrate to use (Defaults to '4.6.2')
+    type: string
+    default: "4.6.2"
+  pkg-spec:
+    description: Spec of packages to test (Defaults to './...')
+    type: string
+    default: ./...
+  postgres-version:
+    description: verion of postgres to use (Defaults to 'latest'; must be a valid docker postgres tag)
+    type: string
+    default: latest
+  redis-version:
+    description: verion of redis to use (Defaults to 'latest'; must be a valid docker redis tag)
+    type: string
+    default: latest
+  test-opts:
+    description: go test options (Defaults to '-v -timeout 30s -race')
+    type: string
+    default: -v -timeout 30s -race
+  version:
+    description: version of golang to use (Defaults to 'latest'; must be a valid docker circleci/golang tag)
+    type: string
+    default: latest
+
 steps:
   - checkout
   - when:
@@ -36,6 +69,27 @@ steps:
             keys:
               - v1-mod-cache-{{ checksum "go.sum" }}
               - v1-mod-cache-
+  - when:
+      condition: << parameters.install-postgresql-client >>
+      steps:
+        - run: |
+            sudo apt install -y postgresql-client &&
+            echo 'export PGHOST="localhost"' >> $BASH_ENV &&
+            echo 'export PGUSER="postgres"' >> $BASH_ENV &&
+            echo 'export DATABASE_URL="postgres://postgres@localhost:5432?sslmode=disable"' >> $BASH_ENV
+  - when:
+      condition: << parameters.install-redis-tools >>
+      steps:
+        - run: |
+            sudo apt install -y redis-tools &&
+            echo 'export REDIS_URL="redis://localhost:6379"' >> $BASH_ENV
+  - when:
+      condition: << parameters.migrate >>
+      steps:
+        - golang-migrate:
+            command: up
+            migration-path: << parameters.migration-path >>
+            version: << parameters.migration-version >>
   - go-test:
       pkg-spec: << parameters.pkg-spec >>
       test-opts: << parameters.test-opts >> <<# parameters.cover >> -coverprofile=coverage.out -covermode=<< parameters.covermode >><</ parameters.cover >>

@@ -1,0 +1,17 @@
+description: Basic usage with most things turned off.
+
+usage:
+  version: 2.1
+  orbs:
+    golang: heroku/golang@volatile
+
+  workflows:
+    ci:
+      jobs:
+        - golang/golangci-lint
+        - golang/test:
+            cover: false
+            install-postgresql-client: false
+            install-redis-tools: false
+            migrate: false
+            cache: false

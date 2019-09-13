@@ -4,7 +4,7 @@ description: |
 steps:
   - run:
       command: |
-        go tool cover -html=coverage.txt -o coverage.html
+        go tool cover -html=coverage.out -o coverage.html
   - run:
       command: |
         mkdir -p /tmp/coverage
