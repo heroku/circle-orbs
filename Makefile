@@ -11,6 +11,8 @@ validate: pack
 .PHONY: publish
 publish: check-version validate
 	circleci orb publish ./golang.yml heroku/golang@$(VERSION)
+	git tag v$(VERSION)
+	git push --tags
 
 .PHONY: check-version
 check-version:
