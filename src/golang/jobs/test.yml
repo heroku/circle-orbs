@@ -19,6 +19,14 @@ parameters:
     description: go test options (Defaults to '-v -timeout 30s -race')
     type: string
     default: -v -timeout 30s -race
+  cover:
+    description: create and save coverage output
+    type: boolean
+    default: true
+  covermode:
+    description: cover mode (Defaults to 'atomic')
+    type: string
+    default: atomic
 steps:
   - checkout
   - when:
@@ -30,7 +38,11 @@ steps:
               - v1-mod-cache-
   - go-test:
       pkg-spec: << parameters.pkg-spec >>
-      test-opts: << parameters.test-opts >>
+      test-opts: << parameters.test-opts >> <<# parameters.cover >> -coverprofile=coverage.out -covermode=<< parameters.covermode >><</ parameters.cover >>
+  - when:
+      condition: << parameters.cover >>
+      steps:
+        - cover
   - when:
       condition: << parameters.cache >>
       steps:
