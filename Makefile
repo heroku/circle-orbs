@@ -1,11 +1,11 @@
-golang.yml: $(wildcard src/golang/**/*)
+golang.yml: $(wildcard ./src/golang/*) $(wildcard ./src/golang/**/*)
 	circleci config pack ./src/golang > golang.yml
 
 .PHONY: pack
 pack: golang.yml
 
 .PHONY: validate
-validate: golang.yml
+validate: pack
 	circleci orb validate golang.yml
 
 .PHONY: publish
