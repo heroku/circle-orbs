@@ -1,21 +1,38 @@
-golang.yml: $(wildcard ./src/golang/*) $(wildcard ./src/golang/**/*)
-	circleci config pack ./src/golang > golang.yml
+srcdirs := $(wildcard src/**/**/*) 
+.build/%.yml: $(srcdirs)
+	circleci config pack ./src/$* > .build/$(notdir $@)
 
-.PHONY: pack
-pack: golang.yml
+.PHONY: pack Makefile
+pack: .build/$(ORB).yml
 
 .PHONY: validate
-validate: pack
-	circleci orb validate golang.yml
+validate: check-orb pack
+	circleci orb validate .build/$(ORB).yml
 
 .PHONY: publish
-publish: check-version validate
-	circleci orb publish ./golang.yml heroku/golang@$(VERSION)
-	git tag v$(VERSION)
+publish: check-version check-orb validate
+	circleci orb publish .build/$(ORB).yml heroku/$(ORB)@$(VERSION)
+ifneq (dev:,$(findstring dev:,$(VERSION)))
+	git tag $(ORB)-v$(VERSION)
 	git push --tags
+endif
 
-.PHONY: check-version
+.PHONY: new
+new: check-orb
+	circleci orb create heroku/$(ORB)
+	mkdir -p src/$(ORB)
+	echo "version: 2.1" > src/$(ORB)/@$(ORB).yml
+	echo "description: New orb $(ORB)." >> src/$(ORB)/@$(ORB).yml
+	$(MAKE) validate ORB=$(ORB)
+
+.PHONY: check-versionq
 check-version:
 ifndef VERSION
 	$(error VERSION is undefined; Run: `make VERSION="..." publish`)
+endif
+
+.PHONY: check-orb
+check-orb:
+ifndef ORB
+	$(error ORB is undefined; Run: `make ORB="..." publish`)
 endif
