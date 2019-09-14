@@ -1,0 +1,7 @@
+description: install redis-tools
+steps:
+  - run:
+      name: install redis-tools
+      command: |
+        sudo apt install -y redis-tools &&
+        echo 'export REDIS_URL="redis://localhost:6379"' >> $BASH_ENV

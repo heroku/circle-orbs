@@ -72,17 +72,11 @@ steps:
   - when:
       condition: << parameters.install-postgresql-client >>
       steps:
-        - run: |
-            sudo apt install -y postgresql-client &&
-            echo 'export PGHOST="localhost"' >> $BASH_ENV &&
-            echo 'export PGUSER="postgres"' >> $BASH_ENV &&
-            echo 'export DATABASE_URL="postgres://postgres@localhost:5432?sslmode=disable"' >> $BASH_ENV
+        - install-postgresql-client
   - when:
       condition: << parameters.install-redis-tools >>
       steps:
-        - run: |
-            sudo apt install -y redis-tools &&
-            echo 'export REDIS_URL="redis://localhost:6379"' >> $BASH_ENV
+        - install-redis-tools
   - when:
       condition: << parameters.migrate >>
       steps:

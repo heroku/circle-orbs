@@ -1,0 +1,12 @@
+description: install postgresql-client package
+steps:
+  - run:
+      name: install postgresql-client package
+      command: |
+        sudo apt install -y postgresql-client &&
+        echo 'export PGHOST="localhost"' >> $BASH_ENV &&
+        echo 'export PGUSER="postgres"' >> $BASH_ENV &&
+        echo 'export DATABASE_URL="postgres://postgres@localhost:5432?sslmode=disable"' >> $BASH_ENV
+  - run:
+      name: Waiting for postgres to be ready
+      command: dockerize -wait tcp://localhost:5432 -timeout 1m
