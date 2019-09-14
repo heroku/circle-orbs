@@ -1,0 +1,22 @@
+description: |
+  run snyk
+  Assumes SNYK_TOKEN is set in the project
+  If language support for a different language is needed you can override the executor of this job with the "executor" parameter.
+executor: << parameters.executor >>
+parameters:
+  executor:
+    type: executor
+    default: golang
+  severity-threshold:
+    description: synk severity threshold (Defaults to 'high')
+    type: enum
+    enum: ["low", "medium", "high"]
+    default: "high"
+steps:
+  - checkout
+  - snyk/scan:
+      fail-on-issues: true
+      monitor-on-build: true
+      project: "${CIRCLE_PROJECT_REPONAME}/${CIRCLE_BRANCH}-app"
+      severity-threshold: << parameters.severity-threshold >>
+      token-variable: SNYK_TOKEN

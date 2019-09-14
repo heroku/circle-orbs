@@ -1,0 +1,11 @@
+description: Workflow with one job, to run snyk.
+
+usage:
+  version: 2.1
+  orbs:
+    snyk: heroku/snyk@volatile
+
+  workflows:
+    ci:
+      jobs:
+        - snyk/snyk
