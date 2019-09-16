@@ -11,6 +11,10 @@ parameters:
     description: Use circle ci cache (Defaults to 'true')
     type: boolean
     default: true
+  checkout:
+    description: Checkout the code (Defaults to 'true')
+    type: boolean
+    default: true
   cover:
     description: Controls the creation and saving of coverage output (Defaults to 'true')
     type: boolean
@@ -33,7 +37,10 @@ parameters:
     default: latest
 
 steps:
-  - checkout
+  - when:
+      condition: << parameters.checkout >>
+      steps:
+        - checkout
   - go:
       pkg-spec: << parameters.pkg-spec >>
       opts: test << parameters.test-opts >> <<# parameters.cover >> -coverprofile=coverage.out -covermode=<< parameters.covermode >><</ parameters.cover >>
