@@ -1,0 +1,31 @@
+description: |
+  execute go command
+parameters:
+  pkg-spec:
+    description: Spec of packages to use (Defaults to './...')
+    type: string
+    default: ./...
+  opts:
+    description: go command options (aside from pkg spec)
+    type: string
+  cache:
+    description: utilize the circle ci cache to cache modules (Defaults to 'true')
+    type: boolean
+    default: true
+steps:
+  - when:
+      condition: << parameters.cache >>
+      steps:
+        - restore_cache:
+            keys:
+              - v1-mod-cache-{{ checksum "go.sum" }}
+              - v1-mod-cache-
+  - run: go << parameters.opts >> << parameters.pkg-spec >>
+  - when:
+      condition: << parameters.cache >>
+      steps:
+        - save_cache:
+            key: v1-mod-cache-{{ checksum "go.sum" }}
+            paths:
+              - "/go/pkg/mod"
+              - "/go/pkg/sumdb"

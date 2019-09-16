@@ -63,13 +63,6 @@ parameters:
 steps:
   - checkout
   - when:
-      condition: << parameters.cache >>
-      steps:
-        - restore_cache:
-            keys:
-              - v1-mod-cache-{{ checksum "go.sum" }}
-              - v1-mod-cache-
-  - when:
       condition: << parameters.install-postgresql-client >>
       steps:
         - install-postgresql-client
@@ -84,18 +77,10 @@ steps:
             command: up
             migration-path: << parameters.migration-path >>
             version: << parameters.migration-version >>
-  - go-test:
+  - go:
       pkg-spec: << parameters.pkg-spec >>
-      test-opts: << parameters.test-opts >> <<# parameters.cover >> -coverprofile=coverage.out -covermode=<< parameters.covermode >><</ parameters.cover >>
+      opts: << parameters.test-opts >> <<# parameters.cover >> -coverprofile=coverage.out -covermode=<< parameters.covermode >><</ parameters.cover >>
   - when:
       condition: << parameters.cover >>
       steps:
         - cover
-  - when:
-      condition: << parameters.cache >>
-      steps:
-        - save_cache:
-            key: v1-mod-cache-{{ checksum "go.sum" }}
-            paths:
-              - "/go/pkg/mod"
-              - "/go/pkg/sumdb"

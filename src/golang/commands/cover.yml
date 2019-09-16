@@ -1,13 +1,29 @@
 description: |
   Go code coverage (go tool cover).
-  Produces html coverage output to /tmp/coverage/coverage.html, which is then archived.
+  Produces html coverage output to /tmp/coverage/coverage.html, which is then optionally archived.
+parameters:
+  pkg-spec:
+    description: Spec of packages to test (Defaults to './...')
+    type: string
+    default: ./...
+  opts:
+    description: Cover options (Defaults to '-html=coverage.out -o coverage.html')
+    type: string
+    default: -html=coverage.out -o coverage.html
+  store:
+    description: Store artifacts flag (Defaults to 'true')
+    type: boolean
+    default: true
 steps:
-  - run:
-      command: |
-        go tool cover -html=coverage.out -o coverage.html
+  - go:
+      pkg-spec: << parameters.pkg-spec >>
+      opts: tool cover << parameters.opts >>
   - run:
       command: |
         mkdir -p /tmp/coverage
         cp coverage.html /tmp/coverage
-  - store_artifacts:
-      path: /tmp/coverage
+  - when:
+      condition: << parameters.store >>
+      steps:
+        - store_artifacts:
+            path: /tmp/coverage

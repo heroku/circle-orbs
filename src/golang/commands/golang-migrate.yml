@@ -21,20 +21,24 @@ steps:
       condition: << parameters.cache >>
       steps:
         - restore_cache:
+            name: Restore migrate tool cache
             keys:
               - cache-tools-golang-migrate-<<parameters.version>>
-  - run: |
-      if [ ! -x ".tools/migrate.linux-amd64-<<parameters.version>>" ]; then
-        mkdir -p .tools &&
-        rm -f .tools/migrate.linux-amd64* &&
-        curl -sSL https://github.com/golang-migrate/migrate/releases/download/v<< parameters.version>>/migrate.linux-amd64.tar.gz | tar zxf - -C .tools &&
-        mv .tools/migrate.linux-amd64 .tools/migrate.linux-amd64-<<parameters.version>>
-      fi &&
-      .tools/migrate.linux-amd64-<<parameters.version>> -database "${DATABASE_URL-"postgres:///test?sslmode=disable"}" -path << parameters.migration-path >> << parameters.command >>
+  - run:
+      name: Install migrate tool
+      command: |
+        if [ ! -x ".tools/migrate.linux-amd64-<<parameters.version>>" ]; then
+          mkdir -p .tools &&
+          rm -f .tools/migrate.linux-amd64* &&
+          curl -sSL https://github.com/golang-migrate/migrate/releases/download/v<< parameters.version>>/migrate.linux-amd64.tar.gz | tar zxf - -C .tools &&
+          mv .tools/migrate.linux-amd64 .tools/migrate.linux-amd64-<<parameters.version>>
+        fi &&
+        .tools/migrate.linux-amd64-<<parameters.version>> -database "${DATABASE_URL-"postgres:///test?sslmode=disable"}" -path << parameters.migration-path >> << parameters.command >>
   - when:
       condition: << parameters.cache >>
       steps:
         - save_cache:
+            name: Save migrate tool cache
             key: cache-tools-golang-migrate-<<parameters.version>>
             paths:
               - ".tools/migrate.linux-amd64-<<parameters.version>>"
