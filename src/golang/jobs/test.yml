@@ -1,4 +1,6 @@
-description: Go test job
+description: |
+  Go test job with databases (postgresql & redis) as secondary executors, go-migrate, & go cover.
+  If you don't need postgresql / redis use the 'test-no-dbs' job.
 
 executor:
   name: golang-with-dbs
@@ -79,7 +81,7 @@ steps:
             version: << parameters.migration-version >>
   - go:
       pkg-spec: << parameters.pkg-spec >>
-      opts: << parameters.test-opts >> <<# parameters.cover >> -coverprofile=coverage.out -covermode=<< parameters.covermode >><</ parameters.cover >>
+      opts: test << parameters.test-opts >> <<# parameters.cover >> -coverprofile=coverage.out -covermode=<< parameters.covermode >><</ parameters.cover >>
   - when:
       condition: << parameters.cover >>
       steps:

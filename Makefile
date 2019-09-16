@@ -2,8 +2,8 @@ srcdirs := $(wildcard src/**/**/*)
 .build/%.yml: $(srcdirs)
 	circleci config pack ./src/$* > .build/$(notdir $@)
 
-.PHONY: pack Makefile
-pack: .build/$(ORB).yml
+.PHONY: pack
+pack: check-orb .build/$(ORB).yml
 
 .PHONY: validate
 validate: check-orb pack

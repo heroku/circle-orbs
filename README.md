@@ -1,7 +1,11 @@
 # Heroku Circle CI Orbs
 
-* [Heroku/golang](https://circleci.com/orbs/registry/orb/heroku/golang)
-* [Heroku/snyk](https://circleci.com/orbs/registry/orb/heroku/snyk)
+Full documentation is on circle ci's site, linked below.
+
+* [heroku/golang](https://circleci.com/orbs/registry/orb/heroku/golang)
+* [heroku/snyk](https://circleci.com/orbs/registry/orb/heroku/snyk)
+
+Full documentation is on circle ci's site.
 
 ## Development
 

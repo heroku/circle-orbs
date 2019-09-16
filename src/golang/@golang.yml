@@ -1,4 +1,4 @@
 version: 2.1
 description: |
-  Orb for golang. Provides golangci-lint, test (go test), & cover (go test + go tool cover).
+  Orb for golang. Provides golangci-lint, test (go test w/support for postgres, redis, & gomigrate), and test-nodb (go test w/o support for postgres and redis).
   Source repo https://github.com/heroku/circle-orbs/tree/master/src/golang

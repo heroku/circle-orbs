@@ -2,9 +2,8 @@ description: |
   execute go command
 parameters:
   pkg-spec:
-    description: Spec of packages to use (Defaults to './...')
+    description: Spec of packages to use
     type: string
-    default: ./...
   opts:
     description: go command options (aside from pkg spec)
     type: string

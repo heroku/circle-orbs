@@ -9,9 +9,6 @@ usage:
     ci:
       jobs:
         - golang/golangci-lint
-        - golang/test:
+        - golang/test-nodb:
             cover: false
-            install-postgresql-client: false
-            install-redis-tools: false
-            migrate: false
             cache: false

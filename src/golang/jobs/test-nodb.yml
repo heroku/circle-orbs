@@ -1,0 +1,43 @@
+description: |
+  Plain go test job + go tool cover.
+  If you need postgresql/redis use the `test` job.
+
+executor:
+  name: golang
+  tag: << parameters.version >>
+
+parameters:
+  cache:
+    description: Use circle ci cache (Defaults to 'true')
+    type: boolean
+    default: true
+  cover:
+    description: Controls the creation and saving of coverage output (Defaults to 'true')
+    type: boolean
+    default: true
+  covermode:
+    description: cover mode (Defaults to 'atomic')
+    type: string
+    default: atomic
+  pkg-spec:
+    description: Spec of packages to test (Defaults to './...')
+    type: string
+    default: ./...
+  test-opts:
+    description: go test options (Defaults to '-v -timeout 30s -race')
+    type: string
+    default: -v -timeout 30s -race
+  version:
+    description: version of golang to use (Defaults to 'latest'; must be a valid docker circleci/golang tag)
+    type: string
+    default: latest
+
+steps:
+  - checkout
+  - go:
+      pkg-spec: << parameters.pkg-spec >>
+      opts: test << parameters.test-opts >> <<# parameters.cover >> -coverprofile=coverage.out -covermode=<< parameters.covermode >><</ parameters.cover >>
+  - when:
+      condition: << parameters.cover >>
+      steps:
+        - cover

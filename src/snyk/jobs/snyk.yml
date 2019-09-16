@@ -1,6 +1,7 @@
 description: |
   run snyk
-  Assumes SNYK_TOKEN is set in the project
+  Assumes SNYK_TOKEN is set in the project.
+  Assumes that the snyk project is set to "${CIRCLE_PROJECT_REPONAME}/${CIRCLE_BRANCH}-app"
   If language support for a different language is needed you can override the executor of this job with the "executor" parameter.
 executor: << parameters.executor >>
 parameters:
@@ -12,11 +13,15 @@ parameters:
     type: enum
     enum: ["low", "medium", "high"]
     default: "high"
+  project:
+    description: snyk project name (Defaults to '${CIRCLE_PROJECT_REPONAME}/${CIRCLE_BRANCH}-app')
+    type: string
+    default: ${CIRCLE_PROJECT_REPONAME}/${CIRCLE_BRANCH}-app
 steps:
   - checkout
   - snyk/scan:
       fail-on-issues: true
       monitor-on-build: true
-      project: "${CIRCLE_PROJECT_REPONAME}/${CIRCLE_BRANCH}-app"
+      project: << parameters.project >>
       severity-threshold: << parameters.severity-threshold >>
       token-variable: SNYK_TOKEN
