@@ -1,0 +1,11 @@
+version: 2
+
+jobs:
+  validate:
+    docker:
+      - image: circleci/buildpack-deps:latest
+    steps:
+      - run: make
+workflow:
+  ci:
+    - validate

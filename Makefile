@@ -25,7 +25,7 @@ new: check-orb
 	echo "description: New orb $(ORB)." >> src/$(ORB)/@$(ORB).yml
 	$(MAKE) validate ORB=$(ORB)
 
-.PHONY: check-versionq
+.PHONY: check-version
 check-version:
 ifndef VERSION
 	$(error VERSION is undefined; Run: `make VERSION="..." publish`)
