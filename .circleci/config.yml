@@ -12,6 +12,8 @@ jobs:
           for orb in $(find ./src -type d -depth 1 | sed -e 's/\.\/src\///'); do
             make ORB=${orb} validate
           done
-workflow:
+
+workflows:
   ci:
-    - validate
+    jobs:
+      - validate
