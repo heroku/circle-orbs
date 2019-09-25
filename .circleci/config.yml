@@ -1,0 +1,17 @@
+version: 2
+
+jobs:
+  validate:
+    docker:
+      - image: circleci/buildpack-deps:latest
+    steps:
+      - run: |
+          # Eww :-(
+          curl -o /usr/local/bin/circleci https://circle-downloads.s3.amazonaws.com/releases/build_agent_wrapper/circleci && chmod +x /usr/local/bin/circleci
+
+          for orb in $(find ./src -type d -depth 1 | sed -e 's/\.\/src\///'); do
+            make ORB=${orb} validate
+          done
+workflow:
+  ci:
+    - validate
