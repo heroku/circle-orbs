@@ -8,14 +8,17 @@ jobs:
       - run:
           name: Get Circle CI CLI
           command: |
-            # Eww :-(
             mkdir $HOME/bin &&
-            curl -o $HOME/bin/circleci https://circle-downloads.s3.amazonaws.com/releases/build_agent_wrapper/circleci && chmod +x $HOME/bin/circleci &&
+            # Eww :-(
+            curl -fLSs https://circle.ci/cli | DESTDIR=$HOME/bin bash &&
             echo 'export PATH=$HOME/bin:$PATH' >> $BASH_ENV
+      - checkout
       - run:
           name: Validate ORBS
           command: |
-            for orb in $(find ./src -type d -depth 1 | sed -e 's/\.\/src\///'); do
+            circleci --help &&
+            circleci version &&
+            for orb in $(ls ./src); do
               make ORB=${orb} validate
             done
 

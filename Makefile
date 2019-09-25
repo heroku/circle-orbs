@@ -1,5 +1,9 @@
-srcdirs := $(wildcard src/**/**/*) 
-.build/%.yml: $(srcdirs)
+srcdirs := $(wildcard src/**/**/*)
+
+.build:
+	mkdir -p .build
+
+.build/%.yml: $(srcdirs) .build
 	circleci config pack ./src/$* > .build/$(notdir $@)
 
 .PHONY: pack
