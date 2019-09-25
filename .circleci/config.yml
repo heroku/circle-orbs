@@ -9,12 +9,14 @@ jobs:
           name: Get Circle CI CLI
           command: |
             # Eww :-(
-            curl -o /usr/local/bin/circleci https://circle-downloads.s3.amazonaws.com/releases/build_agent_wrapper/circleci && chmod +x /usr/local/bin/circleci
+            mkdir $HOME/bin &&
+            curl -o $HOME/bin/circleci https://circle-downloads.s3.amazonaws.com/releases/build_agent_wrapper/circleci && chmod +x $HOME/bin/circleci &&
+            echo 'export PATH=$HOME/bin:$PATH' >> $BASH_ENV
       - run:
           name: Validate ORBS
           command: |
             for orb in $(find ./src -type d -depth 1 | sed -e 's/\.\/src\///'); do
-              make ORB=${orb} validate
+              make ORB=${orb} validate \
             done
 
 workflows:
