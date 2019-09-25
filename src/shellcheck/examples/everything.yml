@@ -1,0 +1,13 @@
+description: shellcheck it
+
+usage:
+  version: 2.1
+  orbs:
+    shellcheck: heroku/shellcheck@latest
+
+  workflows:
+    ci:
+      jobs:
+        - shellcheck/shellcheck:
+            paths: scripts internal
+          

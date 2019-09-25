@@ -1,0 +1,20 @@
+description: shellcheck job
+executor:
+  name: shellcheck
+  tag: << parameters.version >>
+parameters:
+  version:
+    description: version of shellcheck to use (Defaults to 'latest''; must be a valid docker heroku/shellcheck tag)
+    type: string
+    default: latest
+  paths:
+    description: Space separated list of root paths to search for shell scripts in. (Defaults to `.')
+    type: string
+    default: .
+steps:
+  - checkout
+  - run:
+      command: |
+        for path in << parameters.paths >>; do
+           shellcheck $(find $path -name '*.sh')
+        done

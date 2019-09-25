@@ -1,0 +1,8 @@
+docker:
+  - image: heroku/shellcheck:<< parameters.tag >>
+parameters:
+  tag:
+    description: tag of the `heroku/shellcheck` docker image to use (Defaults to 'latest')
+    type: string
+    default: latest
+resource_class: small

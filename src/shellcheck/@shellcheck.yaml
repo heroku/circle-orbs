@@ -1,0 +1,4 @@
+version: 2.1
+description: |
+  Orb for shellcheck. Provides shellcheck to check shell scripts.
+  Source repo https://github.com/heroku/circle-orbs/tree/master/src/shellcheck
