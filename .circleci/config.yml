@@ -16,8 +16,6 @@ jobs:
       - run:
           name: Validate ORBS
           command: |
-            circleci --help &&
-            circleci version &&
             for orb in $(ls ./src); do
               make ORB=${orb} validate
             done
