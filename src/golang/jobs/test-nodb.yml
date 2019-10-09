@@ -23,14 +23,18 @@ parameters:
     description: cover mode (Defaults to 'atomic')
     type: string
     default: atomic
+  race-detector:
+    description: Controls race detector (Defaults to 'true')
+    type: boolean
+    default: true
   pkg-spec:
     description: Spec of packages to test (Defaults to './...')
     type: string
     default: ./...
   test-opts:
-    description: go test options (Defaults to '-v -timeout 30s -race')
+    description: go test options (Defaults to '-v -timeout 30s')
     type: string
-    default: -v -timeout 30s -race
+    default: -v -timeout 30s
   version:
     description: version of golang to use (Defaults to 'latest'; must be a valid docker circleci/golang tag)
     type: string
@@ -43,7 +47,7 @@ steps:
         - checkout
   - go:
       pkg-spec: << parameters.pkg-spec >>
-      opts: test << parameters.test-opts >> <<# parameters.cover >> -coverprofile=coverage.out -covermode=<< parameters.covermode >><</ parameters.cover >>
+      opts: test << parameters.test-opts >> <<# parameters.race-detector >> -race <</ parameters.race-detector >> <<# parameters.cover >> -coverprofile=coverage.out -covermode=<< parameters.covermode >><</ parameters.cover >>
       cache: << parameters.cache >>
   - when:
       condition: << parameters.cover >>
