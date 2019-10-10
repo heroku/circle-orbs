@@ -14,6 +14,10 @@ The directories require [packing](https://circleci.com/docs/2.0/creating-orbs/#p
 
 Example: `src/golang` contains the source for the heroku/golang orb.
 
+### Dependencies
+
+You will need the `circleci` cli which can be installed with `brew install circleci` on macOS or by following [CircleCI's instructions](https://circleci.com/docs/2.0/local-cli/#installation).
+
 ### Validating an orb
 
 While hacking on an orb you will want to validate it every so often. The Makefile target `validate` will pack the
