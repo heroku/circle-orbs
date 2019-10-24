@@ -13,6 +13,14 @@ parameters:
     description: Use circle ci cache (Defaults to 'true')
     type: boolean
     default: true
+  check-modules:
+    description: Check that the modules are tidy/up-to-date (Defaults to 'true')
+    type: boolean
+    default: true
+  check-vendor:
+    description: Check that `vendor/` directory is up to date (Defaults to 'false')
+    type: boolean
+    default: false
   checkout:
     description: Checkout the code (Defaults to 'true')
     type: boolean
@@ -54,11 +62,11 @@ parameters:
     type: string
     default: ./...
   postgres-version:
-    description: verion of postgres to use (Defaults to 'latest'; must be a valid docker postgres tag)
+    description: version of postgres to use (Defaults to 'latest'; must be a valid docker postgres tag)
     type: string
     default: latest
   redis-version:
-    description: verion of redis to use (Defaults to 'latest'; must be a valid docker redis tag)
+    description: version of redis to use (Defaults to 'latest'; must be a valid docker redis tag)
     type: string
     default: latest
   test-opts:
@@ -75,6 +83,53 @@ steps:
       condition: << parameters.checkout >>
       steps:
         - checkout
+  - when:
+      condition: << parameters.cache >>
+      steps:
+        - restore_cache:
+            keys:
+              - v1-mod-cache-{{ checksum "go.sum" }}
+              - v1-mod-cache-
+  - when:
+      condition: << parameters.check-modules >>
+      steps:
+        - go:
+            pkg-spec: ""
+            opts: mod verify
+        - go:
+            pkg-spec: ""
+            opts: mod tidy
+        - run:
+            name: Check Modules
+            command: |
+              if [ ! -z "$(git status --porcelain)" ]; then
+                echo
+                echo -e '\033[1;93m!!! "go mod verify && go mod tidy" resulted in changes. Please run those commands locally and commit the changes.\e[0m'
+                echo
+                git status
+                exit 1
+              fi
+  - when:
+      condition: << parameters.check-vendor >>
+      steps:
+        - run:
+            name: Check Vendor
+            command: |
+              if [ -d ./vendor ]; then
+                go mod vendor
+              else
+                echo
+                echo -e '\033[1;93m./vendor does not exist, but "check-vendor" is enabled. Disable check-vendor or populate a vendor folder\e[0m'
+                echo
+                exit 1
+              fi
+              if [ ! -z "$(git status --porcelain)" ]; then
+                git status
+                echo
+                echo -e '\033[1;93m!!! "go mod vendor" resulted in changes. Please run that command locally and commit the changes.\e[0m'
+                echo
+                exit 1
+              fi
   - when:
       condition: << parameters.install-postgresql-client >>
       steps:
@@ -93,8 +148,15 @@ steps:
   - go:
       pkg-spec: << parameters.pkg-spec >>
       opts: test << parameters.test-opts >> <<# parameters.race-detector >> -race <</ parameters.race-detector >> <<# parameters.cover >> -coverprofile=coverage.out -covermode=<< parameters.covermode >><</ parameters.cover >>
-      cache: << parameters.cache >>
   - when:
       condition: << parameters.cover >>
       steps:
         - cover
+  - when:
+      condition: << parameters.cache >>
+      steps:
+        - save_cache:
+            key: v1-mod-cache-{{ checksum "go.sum" }}
+            paths:
+              - "/go/pkg/mod"
+              - "/go/pkg/sumdb"
