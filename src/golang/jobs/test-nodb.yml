@@ -73,10 +73,10 @@ steps:
             name: Check Modules
             command: |
               if [ ! -z "$(git status --porcelain)" ]; then
+                git status
                 echo
                 echo -e '\033[1;93m!!! "go mod verify && go mod tidy" resulted in changes. Please run those commands locally and commit the changes.\e[0m'
                 echo
-                git status
                 exit 1
               fi
   - when:
