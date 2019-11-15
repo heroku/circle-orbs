@@ -1,0 +1,12 @@
+description: |
+  Notify Code Climate of a pending test report using `before build`.
+  Assumes code-climate-reporter-dl has already run.
+parameters:
+  location:
+    description: Location of the Code Climate Reporter (Defaults to '/tmp/code-climate/cc-test-reporter')
+    type: string
+    default: /tmp/code-climate/cc-test-reporter
+steps:
+  - run:
+      name:  Notify Code Climate of a pending test report using `before build`
+      command: << parameters.location >> before-build
