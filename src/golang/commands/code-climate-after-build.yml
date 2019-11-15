@@ -1,0 +1,16 @@
+description: |
+  Upload test report to Code Climate.
+  Assumes code-climate-reporter-dl has already run.
+parameters:
+  location:
+    description: Location of the Code Climate Reporter (Defaults to '/tmp/code-climate/cc-test-reporter')
+    type: string
+    default: /tmp/code-climate/cc-test-reporter
+steps:
+  - run:
+      name: Upload test report to Code Climate.
+      command: |
+        export CCC=$(mktemp -d)
+        sed -e "s:$(go list -m):.:" < ./coverage.out > $CCC/c.out
+        << parameters.location >> format-coverage $CCC/c.out -t gocov
+        << parameters.location >> upload-coverage

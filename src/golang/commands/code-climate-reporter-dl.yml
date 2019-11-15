@@ -1,0 +1,16 @@
+description: |
+  Download the code climate reporter
+parameters:
+  location:
+    description: Where to download the Code Climate Reporter to (Defaults to '/tmp/code-climate/cc-test-reporter')
+    type: string
+    default: /tmp/code-climate/cc-test-reporter
+steps:
+  - run:
+      name: Download Code Climate Reporter (cc-test-reporter)
+      command: |
+              if [ ! -x << parameters.location >> ]; then 
+                mkdir -p $(dirname << parameters.location >>)
+                curl -L -o << parameters.location >> https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64
+                chmod +x << parameters.location >>
+              fi

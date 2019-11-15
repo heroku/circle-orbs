@@ -23,6 +23,10 @@ parameters:
     description: Checkout the code (Defaults to 'true')
     type: boolean
     default: true
+  code-climate:
+    description: Check in with Code Climate & Upload results (Defaults to 'false')
+    type: boolean
+    default: false
   cover:
     description: Controls the creation and saving of coverage output (Defaults to 'true')
     type: boolean
@@ -100,9 +104,18 @@ steps:
                 echo
                 exit 1
               fi
+  - when:
+      condition: << parameters.code-climate >>
+      steps:
+        - code-climate-reporter-dl
+        - code-climate-before-build
   - go:
       pkg-spec: << parameters.pkg-spec >>
       opts: test << parameters.test-opts >> <<# parameters.race-detector >> -race <</ parameters.race-detector >> <<# parameters.cover >> -coverprofile=coverage.out -covermode=<< parameters.covermode >><</ parameters.cover >>
+  - when:
+      condition: << parameters.code-climate >>
+      steps:
+        - code-climate-after-build
   - when:
       condition: << parameters.cover >>
       steps:
