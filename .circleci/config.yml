@@ -1,4 +1,7 @@
-version: 2
+version: 2.1
+
+orbs:
+  orb-tools: circleci/orb-tools@8.3.0
 
 jobs:
   validate:
@@ -24,4 +27,8 @@ workflows:
   version: 2
   ci:
     jobs:
+      - orb-tools/lint
+      - orb-tools/pack:
+          requires:
+            - orb-tools/lint
       - validate
