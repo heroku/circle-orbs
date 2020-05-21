@@ -1,11 +1,11 @@
 description: Executor based on the circleci/golang docker image
 docker:
-  - image: circleci/golang:<< parameters.tag >>
+  - image: cimg/go:<< parameters.tag >>
 parameters:
   tag:
-    description: tag of the circleci/golang docker image to use (Defaults to 'latest')
+    description: tag of the circleci/golang docker image to use (Defaults to '1.14')
     type: string
-    default: latest
+    default: "1.14"
   resource_class:
     description: resource_class to use (Defaults to 'medium')
     type: string
