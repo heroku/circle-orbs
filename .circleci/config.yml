@@ -31,4 +31,13 @@ workflows:
       - orb-tools/pack:
           requires:
             - orb-tools/lint
+          source-dir: src/golang
+          destination-orb-path: golang.yml
+          workspace-path: golang.yml
+      - orb-tools/pack:
+          requires:
+            - orb-tools/lint
+          source-dir: src/snyk
+          destination-orb-path: snyk.yml
+          workspace-path: snyk.yml
       - validate
