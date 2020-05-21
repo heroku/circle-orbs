@@ -3,28 +3,7 @@ version: 2.1
 orbs:
   orb-tools: circleci/orb-tools@8.3.0
 
-jobs:
-  validate:
-    docker:
-      - image: circleci/buildpack-deps:latest
-    steps:
-      - run:
-          name: Get Circle CI CLI
-          command: |
-            mkdir $HOME/bin &&
-            # Eww :-(
-            curl -fLSs https://circle.ci/cli | DESTDIR=$HOME/bin bash &&
-            echo 'export PATH=$HOME/bin:$PATH' >> $BASH_ENV
-      - checkout
-      - run:
-          name: Validate ORBS
-          command: |
-            for orb in $(ls ./src); do
-              make ORB=${orb} validate
-            done
-
 workflows:
-  version: 2
   ci:
     jobs:
       - orb-tools/lint
@@ -40,4 +19,3 @@ workflows:
           source-dir: src/snyk
           destination-orb-path: snyk.yml
           workspace-path: snyk.yml
-      - validate
