@@ -3,9 +3,8 @@ docker:
   - image: cimg/go:<< parameters.tag >>
 parameters:
   tag:
-    description: tag of the circleci/golang docker image to use (Defaults to '1.14')
+    description: tag of the cim/go docker image to use
     type: string
-    default: "1.14"
   resource_class:
     description: resource_class to use (Defaults to 'medium')
     type: string

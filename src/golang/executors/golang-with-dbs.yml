@@ -5,9 +5,8 @@ docker:
   - image: redis:<< parameters.redis-tag >>
 parameters:
   tag:
-    description: tag of the circleci/golang docker image to use (Defaults to '1.14')
+    description: tag of the cim/go docker image to use
     type: string
-    default: "1.14"
   postgres-tag:
     description: tag of the postgres docker image to use (Defaults to 'latest')
     type: string
