@@ -8,5 +8,5 @@ parameters:
     default: /tmp/code-climate/cc-test-reporter
 steps:
   - run:
-      name:  Notify Code Climate of a pending test report using `before build`
+      name: Notify Code Climate of a pending test report using `before build`
       command: << parameters.location >> before-build
