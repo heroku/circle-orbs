@@ -1,13 +1,12 @@
 description: Executor with the circleci/golang docker image as the default, plus postgres and redis
 docker:
-  - image: circleci/golang:<< parameters.tag >>
+  - image: cimg/go:<< parameters.tag >>
   - image: postgres:<< parameters.postgres-tag >>
   - image: redis:<< parameters.redis-tag >>
 parameters:
   tag:
-    description: tag of the circleci/golang docker image to use (Defaults to 'latest')
+    description: tag of the cim/go docker image to use
     type: string
-    default: latest
   postgres-tag:
     description: tag of the postgres docker image to use (Defaults to 'latest')
     type: string
