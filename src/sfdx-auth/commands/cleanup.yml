@@ -1,0 +1,7 @@
+description: |
+  Removes unencrypted credentials.
+steps:
+  - run:
+      name: Clean-up sfdx auth
+      command: |
+        rm connected-app.key || true
