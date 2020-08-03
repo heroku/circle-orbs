@@ -1,0 +1,16 @@
+description: |
+  Downloads Terraform executable to the executor, puts it in the path, and initializes the configuration.
+parameters:
+  terraform-bin-url:
+    type: string
+    default: https://releases.hashicorp.com/terraform/0.12.29/terraform_0.12.29_linux_amd64.zip
+steps:
+  - run:
+      name: Set-up Terraform
+      command: |
+        curl -s -L "<< parameters.terraform-bin-url >>" > "terraform-bin.zip"
+        mkdir -p /home/circleci/bin
+        unzip -p "terraform-bin.zip" > "/home/circleci/bin/terraform"
+        chmod +x "/home/circleci/bin/terraform"
+        rm "terraform-bin.zip"
+        terraform init

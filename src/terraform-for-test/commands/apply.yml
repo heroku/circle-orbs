@@ -1,0 +1,13 @@
+description: |
+  Applies the Terraform configuration with "name" set from environment variable NAME.
+parameters:
+  name-env-var:
+    type: env_var_name
+    default: NAME
+steps:
+  - run:
+      name: Terraform apply
+      command: |
+        terraform apply \
+          -auto-approve -input=false -parallelism=4 \
+          -var="name=${<< parameters.name-env-var >>}"
