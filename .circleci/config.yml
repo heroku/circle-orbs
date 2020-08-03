@@ -16,6 +16,12 @@ workflows:
       - orb-tools/pack:
           requires:
             - orb-tools/lint
+          source-dir: src/sfdx-auth
+          destination-orb-path: sfdx-auth.yml
+          workspace-path: sfdx-auth.yml
+      - orb-tools/pack:
+          requires:
+            - orb-tools/lint
           source-dir: src/snyk
           destination-orb-path: snyk.yml
           workspace-path: snyk.yml
