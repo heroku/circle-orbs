@@ -19,3 +19,9 @@ workflows:
           source-dir: src/snyk
           destination-orb-path: snyk.yml
           workspace-path: snyk.yml
+      - orb-tools/pack:
+          requires:
+            - orb-tools/lint
+          source-dir: src/terraform-for-test
+          destination-orb-path: terraform-for-test.yml
+          workspace-path: terraform-for-test.yml
