@@ -10,6 +10,12 @@ workflows:
       - orb-tools/pack:
           requires:
             - orb-tools/lint
+          source-dir: src/install-sfdx
+          destination-orb-path: install-sfdx.yml
+          workspace-path: install-sfdx.yml
+      - orb-tools/pack:
+          requires:
+            - orb-tools/lint
           source-dir: src/golang
           destination-orb-path: golang.yml
           workspace-path: golang.yml
