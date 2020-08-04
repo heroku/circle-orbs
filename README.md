@@ -3,7 +3,9 @@
 Full documentation is on circle ci's site, linked below.
 
 * [heroku/golang](https://circleci.com/orbs/registry/orb/heroku/golang)
+* [heroku/sfdx-auth](https://circleci.com/orbs/registry/orb/heroku/sfdx-auth)
 * [heroku/snyk](https://circleci.com/orbs/registry/orb/heroku/snyk)
+* [heroku/terraform-for-test](https://circleci.com/orbs/registry/orb/heroku/terraform-for-test)
 
 Full documentation is on circle ci's site.
 

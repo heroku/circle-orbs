@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  orb-tools: circleci/orb-tools@8.3.0
+  orb-tools: circleci/orb-tools@9.2
 
 workflows:
   ci:
@@ -16,6 +16,18 @@ workflows:
       - orb-tools/pack:
           requires:
             - orb-tools/lint
+          source-dir: src/sfdx-auth
+          destination-orb-path: sfdx-auth.yml
+          workspace-path: sfdx-auth.yml
+      - orb-tools/pack:
+          requires:
+            - orb-tools/lint
           source-dir: src/snyk
           destination-orb-path: snyk.yml
           workspace-path: snyk.yml
+      - orb-tools/pack:
+          requires:
+            - orb-tools/lint
+          source-dir: src/terraform-for-test
+          destination-orb-path: terraform-for-test.yml
+          workspace-path: terraform-for-test.yml

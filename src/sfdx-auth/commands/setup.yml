@@ -1,0 +1,55 @@
+description: |
+  Authorizes sfdx CLI using the Salesforce Connected App credentials.
+parameters:
+  org-alias:
+    type: string
+    default: DevHub
+  grant-args:
+    type: string
+    default: --setdefaultdevhubusername
+steps:
+  - run:
+      name: Set-up sfdx auth
+      command: |
+        has_errors=false
+        if ! sfdx version; then
+          echo "Requires installation of sfdx: npm install sfdx-cli"
+          has_errors=true
+        fi
+        if [ ! -f "connected-app.key.enc"]; then
+          echo "Requires 'connected-app.key.enc' encrypted certificate file"
+          has_errors=true
+        fi
+        if [ -z "$SFDX_CONSUMER_KEY" ]; then
+          echo "Requires SFDX_CONSUMER_KEY environment variable"
+          has_errors=true
+        fi
+        if [ -z "$SFDX_CONSUMER_SECRET" ]; then
+          echo "Requires SFDX_CONSUMER_SECRET environment variable"
+          has_errors=true
+        fi
+        if [ -z "$SFDX_USERNAME" ]; then
+          echo "Requires SFDX_USERNAME environment variable"
+          has_errors=true
+        fi
+        if [ "$has_errors" = true ]; then
+          exit 2
+        fi
+
+        # Decrypt the private key stored in the repo's file `connected-app.key.enc`
+        openssl aes-256-cbc \
+          -k "$SFDX_CONSUMER_SECRET" \
+          -in connected-app.key.enc \
+          -out connected-app.key \
+          -d \
+          -md sha256
+
+        # Request authorization using the private key
+        sfdx force:auth:jwt:grant \
+          --clientid "$SFDX_CONSUMER_KEY" \
+          --jwtkeyfile "$(pwd)/connected-app.key" \
+          --username "$SFDX_USERNAME" \
+          -a "<< parameters.org-alias >>" << parameters.grant-args >>
+
+        echo "sfdx force:org:list"
+        sfdx force:org:list

@@ -1,0 +1,3 @@
+version: 2.1
+description: |
+  Authorize `sfdx` CLI via Salesforce Connected App using JWT authentication.
