@@ -34,6 +34,19 @@ make validate ORB=<orb name>
 
 After hacking on an orb it needs to be published. The Makefile target `publish` can do this for you.
 Before publishing it will pack and validate the orb for you.
+
+#### Dev versions
+
+Start publishing with a `dev:*` version to create a mutable version with a 90-day lifetime.
+
+```console
+make publish VERSION=dev:prerelease-01 ORB=<orb_name>
+```
+
+#### Release versions
+
+GitHub org owners & administrators may publish stable, immutable versions.
+
 It will also tag the repo with a tag structured like so: `$ORB-v$VERSION`
 
 ```console
@@ -41,6 +54,8 @@ make publish VERSION=<version> ORB=<orb_name>
 ```
 
 ## Creating a new orb
+
+GitHub org owners may create new orbs.
 
 The Makefile has a `new` target that will register a new orb with circleci, under the heroku namespace, create the basic structure,
 and validate the new orb.
