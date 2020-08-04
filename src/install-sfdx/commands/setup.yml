@@ -14,9 +14,8 @@ steps:
       command: |
         echo "npm install sfdx-cli"
         npm install sfdx-cli
-        mkdir -p /home/circleci/bin
-        ln -s "$(pwd)/node_modules/sfdx-cli/bin/run" /home/circleci/bin/sfdx
-        mkdir -p $HOME/.config/sfdx
+        mkdir -p "$HOME/bin"
+        ln -s "$(pwd)/node_modules/sfdx-cli/bin/run" "$HOME/bin/sfdx"
 
         # This includes special "\" to escape from CircleCI's parameter syntax
         IFS=',' read -ra plugins \<<< "<< parameters.plugins >>"
