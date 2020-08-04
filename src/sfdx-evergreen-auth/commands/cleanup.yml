@@ -1,0 +1,7 @@
+description: |
+  Removes unencrypted credentials.
+steps:
+  - run:
+      name: Clean-up sfdx evergreen auth
+      command: |
+        rm .netrc || true

@@ -1,0 +1,35 @@
+description: |
+  Authorizes sfdx evergreen CLI using the Evergreen Identity refresh token.
+parameters:
+  identity-hostname:
+    type: string
+    default: id.evergreen.salesforce.com
+  api-hostname:
+    type: string
+    default: lyra-edge-api.herokuapp.com
+steps:
+  - run:
+      name: Set-up sfdx evergreen auth
+      command: |
+        has_errors=false
+        if ! sfdx version; then
+          echo "Requires installation of sfdx: npm install sfdx-cli"
+          has_errors=true
+        fi
+        if ! sfdx evergreen; then
+          echo "Requires installation of sfdx evergreen plugin: sfdx plugins:install @salesforce/plugin-evergreen"
+          has_errors=true
+        fi
+        if [ -z "$EVERGREEN_REFRESH_TOKEN" ]; then
+          echo "Requires EVERGREEN_REFRESH_TOKEN environment variable"
+          has_errors=true
+        fi
+        if [ "$has_errors" = true ]; then
+          exit 2
+        fi
+
+        echo $'machine << parameters.identity-hostname >>\n  password' "$EVERGREEN_REFRESH_TOKEN" > "$HOME/.netrc"
+        echo $'machine << parameters.api-hostname >>\n  password' "placeholder" >> "$HOME/.netrc"
+
+        echo "sfdx evergreen:whoami"
+        sfdx evergreen:whoami
