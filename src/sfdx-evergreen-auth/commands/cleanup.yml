@@ -1,0 +1,9 @@
+description: |
+  Removes unencrypted credentials.
+
+  This command deletes the `~/.netrc` file, so be cautious where it is used to avoid conflicts with other usage of this shared credentials file.
+steps:
+  - run:
+      name: Clean-up sfdx evergreen auth
+      command: |
+        rm .netrc || true
