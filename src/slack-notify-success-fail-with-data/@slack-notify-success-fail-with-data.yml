@@ -1,0 +1,3 @@
+version: 2.1
+description: |
+  Send pass/fail notifications with custom data to Slack.

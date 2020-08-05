@@ -1,15 +1,14 @@
 # Heroku Circle CI Orbs
 
-Full documentation is on circle ci's site, linked below.
+User documentation is available on CircleCI Orb Registry:
 
 * [heroku/install-sfdx](https://circleci.com/orbs/registry/orb/heroku/install-sfdx)
 * [heroku/golang](https://circleci.com/orbs/registry/orb/heroku/golang)
 * [heroku/sfdx-auth](https://circleci.com/orbs/registry/orb/heroku/sfdx-auth)
 * [heroku/sfdx-evergreen-auth](https://circleci.com/orbs/registry/orb/heroku/sfdx-evergreen-auth)
+* [heroku/slack-notify-success-fail-with-data](https://circleci.com/orbs/registry/orb/heroku/slack-notify-success-fail-with-data)
 * [heroku/snyk](https://circleci.com/orbs/registry/orb/heroku/snyk)
 * [heroku/terraform-for-test](https://circleci.com/orbs/registry/orb/heroku/terraform-for-test)
-
-Full documentation is on circle ci's site.
 
 ## Development
 
