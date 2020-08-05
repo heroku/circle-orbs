@@ -2,11 +2,11 @@
 
 User documentation is available on CircleCI Orb Registry:
 
-* [heroku/canary-notify-slack](https://circleci.com/orbs/registry/orb/heroku/canary-notify-slack)
 * [heroku/install-sfdx](https://circleci.com/orbs/registry/orb/heroku/install-sfdx)
 * [heroku/golang](https://circleci.com/orbs/registry/orb/heroku/golang)
 * [heroku/sfdx-auth](https://circleci.com/orbs/registry/orb/heroku/sfdx-auth)
 * [heroku/sfdx-evergreen-auth](https://circleci.com/orbs/registry/orb/heroku/sfdx-evergreen-auth)
+* [heroku/slack-notify-success-fail-with-data](https://circleci.com/orbs/registry/orb/heroku/slack-notify-success-fail-with-data)
 * [heroku/snyk](https://circleci.com/orbs/registry/orb/heroku/snyk)
 * [heroku/terraform-for-test](https://circleci.com/orbs/registry/orb/heroku/terraform-for-test)
 

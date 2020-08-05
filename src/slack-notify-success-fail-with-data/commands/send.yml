@@ -1,0 +1,54 @@
+description: |
+  Notify a Slack webhook of success or failure with attachment fields.
+parameters:
+  webhook-url:
+    description: Slack webhook URL. (Contains a secret token.)
+    type: string
+    default: ""
+  title:
+    description: The initial, bolded text displayed in a notification.
+    type: string
+  fields-json-shell-esc:
+    description: Double-quote-shell-escaped JSON string containing an array "[]" of fields to attach to the notification.
+    type: string
+    default: "[]"
+steps:
+  - run:
+      name: Capture failure condition for Slack notification
+      when: on_fail
+      command: |
+        echo 'export ORB_HEROKU_SLACK_NOTIFY_BUILD_STATUS="failure"' >> $BASH_ENV
+        echo 'export ORB_HEROKU_SLACK_NOTIFY_COLOR="#d10d20"' >> $BASH_ENV
+  - run:
+      name: Capture success condition for Slack notification
+      when: on_success
+      command: |
+        echo 'export ORB_HEROKU_SLACK_NOTIFY_BUILD_STATUS="success"' >> $BASH_ENV
+        echo 'export ORB_HEROKU_SLACK_NOTIFY_COLOR="#1bbf43"' >> $BASH_ENV
+  - run:
+      name: Send Slack notification
+      when: always
+      command: |
+        if [ -z "<< parameters.webhook-url >>"]; then
+          echo "Skipping Slack notification, because Orb \"slack-notify-success-fail-with-data.webhook-url\" parameter is empty."
+          exit
+        fi
+        curl -X POST -H 'Content-type: application/json' \
+          --data "{ \
+                    \"text\": \"*<< parameters.title >>* $ORB_HEROKU_SLACK_NOTIFY_BUILD_STATUS on $CIRCLE_BRANCH\", \
+                    \"fallback\": \"<< parameters.title >> $ORB_HEROKU_SLACK_NOTIFY_BUILD_STATUS on $CIRCLE_BRANCH\", \
+                    \"attachments\": [ \
+                      { \
+                        \"type\": \"section\", \
+                        \"color\": \"$ORB_HEROKU_SLACK_NOTIFY_COLOR\", \
+                        \"fields\": << parameters.fields-json-shell-esc >>, \
+                        \"actions\": [ \
+                          { \
+                            \"type\": \"button\", \
+                            \"text\": \"CircleCI build #$CIRCLE_BUILD_NUM\", \
+                            \"url\": \"$CIRCLE_BUILD_URL\" \
+                          } \
+                        ] \
+                      } \
+                    ] \
+                  }" "<< parameters.webhook-url >>"

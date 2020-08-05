@@ -1,3 +1,0 @@
-version: 2.1
-description: |
-  Send canary notifications to Slack containing custom fields.
