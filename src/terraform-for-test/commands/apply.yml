@@ -8,6 +8,10 @@ steps:
   - run:
       name: Terraform apply
       command: |
+        if [ -z "<< parameters.name-env-var >>" ]; then
+          echo "A name (prefix) for the Terraform configuration is required, but the << parameters.name-env-var >> env var is empty."
+          exit 2
+        fi
         terraform apply \
           -auto-approve -input=false -parallelism=4 \
           -var="name=${<< parameters.name-env-var >>}"
