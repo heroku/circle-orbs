@@ -1,5 +1,7 @@
 description: |
   Authorizes sfdx evergreen CLI using the Evergreen Identity refresh token.
+
+  This command appends entries to `~/.netrc`, so be cautious how it is used to avoid conflicts with other usage of this shared credentials file. The appended Netrc "machine" entries are generated from the parameters `identity-hostname` & `api-hostname`.
 parameters:
   identity-hostname:
     type: string
@@ -28,7 +30,7 @@ steps:
           exit 2
         fi
 
-        echo $'machine << parameters.identity-hostname >>\n  password' "$EVERGREEN_REFRESH_TOKEN" > "$HOME/.netrc"
+        echo $'machine << parameters.identity-hostname >>\n  password' "$EVERGREEN_REFRESH_TOKEN" >> "$HOME/.netrc"
         echo $'machine << parameters.api-hostname >>\n  password' "placeholder" >> "$HOME/.netrc"
 
         echo "sfdx evergreen:whoami"
