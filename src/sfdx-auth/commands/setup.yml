@@ -16,7 +16,7 @@ steps:
           echo "Requires installation of sfdx: npm install sfdx-cli"
           has_errors=true
         fi
-        if [ ! -f "connected-app.key.enc"]; then
+        if [ ! -f "connected-app.key.enc" ]; then
           echo "Requires 'connected-app.key.enc' encrypted certificate file"
           has_errors=true
         fi

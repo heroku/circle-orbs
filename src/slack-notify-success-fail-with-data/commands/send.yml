@@ -29,7 +29,7 @@ steps:
       name: Send Slack notification
       when: always
       command: |
-        if [ -z "<< parameters.webhook-url >>"]; then
+        if [ -z "<< parameters.webhook-url >>" ]; then
           echo "Skipping Slack notification, because Orb \"slack-notify-success-fail-with-data.webhook-url\" parameter is empty."
           exit
         fi
