@@ -1,8 +1,12 @@
 description: |
   Install `sfdx` CLI and plugins.
 parameters:
+  package:
+    description: The sfdx CLI to install (npm package like "name@version")
+    type: string
+    default: sfdx-cli
   plugins:
-    description: A comma-delimited list of sfdx plugins to install
+    description: A comma-delimited list of sfdx plugins to install (npm packages like "name@version")
     type: string
     default: ""
 steps:
@@ -12,8 +16,8 @@ steps:
   - run:
       name: Install sfdx CLI + plugins
       command: |
-        echo "npm install sfdx-cli"
-        npm install sfdx-cli
+        echo "npm install << parameters.package >>"
+        npm install << parameters.package >>
         mkdir -p "$HOME/bin"
         ln -s "$(pwd)/node_modules/sfdx-cli/bin/run" "$HOME/bin/sfdx"
 
