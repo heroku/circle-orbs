@@ -10,9 +10,6 @@ parameters:
     type: string
     default: ""
 steps:
-  - restore_cache:
-      keys:
-        - orb-install-sfdx-v1
   - run:
       name: Install sfdx CLI + plugins
       command: |
@@ -31,7 +28,3 @@ steps:
 
         sfdx version | tee current-sfdx-version.txt
         sfdx plugins | tee current-sfdx-plugins.txt
-  - save_cache:
-      key: orb-install-sfdx-v1
-      paths:
-          - node_modules
