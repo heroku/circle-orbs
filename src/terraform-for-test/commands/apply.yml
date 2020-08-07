@@ -2,13 +2,20 @@ description: |
   Applies the Terraform configuration with "name" set from environment variable NAME.
 parameters:
   name-env-var:
+    description: |
+      So that created resources may be named (or prefixed) with a meaningful name, an environment variable containing a distinctive name is required.
+
+      A meaningful name might combine the repo name & build number, such as `$CIRCLE_PROJECT_REPONAME-$CIRCLE_JOB`.
+
+      The Terraform configuration is expected to implement a "name" input variable to receive this value.
+
     type: env_var_name
     default: NAME
 steps:
   - run:
       name: Terraform apply
       command: |
-        if [ -z "<< parameters.name-env-var >>" ]; then
+        if [ -z "$<< parameters.name-env-var >>" ]; then
           echo "A name (prefix) for the Terraform configuration is required, but the << parameters.name-env-var >> env var is empty."
           exit 2
         fi
