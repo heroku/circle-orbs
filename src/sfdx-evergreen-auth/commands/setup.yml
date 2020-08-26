@@ -8,7 +8,7 @@ parameters:
     default: id.evergreen.salesforce.com
   api-hostname:
     type: string
-    default: lyra-edge-api.herokuapp.com
+    default: api.evergreen.salesforce.com
 steps:
   - run:
       name: Set-up sfdx evergreen auth
