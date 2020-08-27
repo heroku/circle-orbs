@@ -32,6 +32,8 @@ steps:
 
         echo $'machine << parameters.identity-hostname >>\n  password' "$EVERGREEN_REFRESH_TOKEN" >> "$HOME/.netrc"
         echo $'machine << parameters.api-hostname >>\n  password' "placeholder" >> "$HOME/.netrc"
+        # include old hostname name for backward compatibility
+        echo $'machine lyra-edge-api.herokuapp.com\n  password' "placeholder" >> "$HOME/.netrc"
 
         echo "sfdx evergreen:whoami"
         sfdx evergreen:whoami
