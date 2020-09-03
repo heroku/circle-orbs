@@ -30,8 +30,8 @@ steps:
           exit 2
         fi
 
-        echo $'machine << parameters.identity-hostname >>\n  password' "$EVERGREEN_REFRESH_TOKEN" >> "$HOME/.netrc"
-        echo $'machine << parameters.api-hostname >>\n  password' "placeholder" >> "$HOME/.netrc"
+        echo "machine << parameters.identity-hostname >>"$'\n  password' "$EVERGREEN_REFRESH_TOKEN" >> "$HOME/.netrc"
+        echo "machine << parameters.api-hostname >>"$'\n  password' "placeholder" >> "$HOME/.netrc"
 
         echo "sfdx evergreen:whoami"
         sfdx evergreen:whoami
