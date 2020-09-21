@@ -16,16 +16,8 @@ steps:
           echo "Requires installation of sfdx: npm install sfdx-cli"
           has_errors=true
         fi
-        if [ ! -f "connected-app.key.enc" ]; then
-          echo "Requires 'connected-app.key.enc' encrypted certificate file"
-          has_errors=true
-        fi
         if [ -z "$SFDX_CONSUMER_KEY" ]; then
           echo "Requires SFDX_CONSUMER_KEY environment variable"
-          has_errors=true
-        fi
-        if [ -z "$SFDX_CONSUMER_SECRET" ]; then
-          echo "Requires SFDX_CONSUMER_SECRET environment variable"
           has_errors=true
         fi
         if [ -z "$SFDX_USERNAME" ]; then
@@ -36,13 +28,26 @@ steps:
           exit 2
         fi
 
-        # Decrypt the private key stored in the repo's file `connected-app.key.enc`
-        openssl aes-256-cbc \
-          -k "$SFDX_CONSUMER_SECRET" \
-          -in connected-app.key.enc \
-          -out connected-app.key \
-          -d \
-          -md sha256
+        # Output `connected-app.key` from either the base64-encoded env var, or an encrypted file & secret env var
+        if [ -n "$SFDX_JWT_KEY" ]; then
+          # Decode the private key stored in the environment variable
+          echo $SFDX_JWT_KEY | base64 --decode --ignore-garbage > connected-app.key
+        elif [ -f "connected-app.key.enc" ]; then
+          # Decrypt the private key stored in the repo's file `connected-app.key.enc`
+          if [ -z "$SFDX_CONSUMER_SECRET" ]; then
+            echo "Requires SFDX_CONSUMER_SECRET environment variable"
+            exit 2
+          fi
+          openssl aes-256-cbc \
+            -k "$SFDX_CONSUMER_SECRET" \
+            -in connected-app.key.enc \
+            -out connected-app.key \
+            -d \
+            -md sha256
+        else
+          echo "Requires either: base64-encoded SFDX_JWT_KEY env var, or 'connected-app.key.enc' file & SFDX_CONSUMER_SECRET env var"
+          exit 2
+        fi
 
         # Request authorization using the private key
         sfdx force:auth:jwt:grant \
