@@ -1,0 +1,6 @@
+description: update package index
+steps:
+  - run:
+      name: update package index
+      command: |
+        sudo apt-get update

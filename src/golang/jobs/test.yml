@@ -41,6 +41,10 @@ parameters:
     description: Controls race detector (Defaults to 'true')
     type: boolean
     default: true
+  update-package-index:
+    description: Update package index (Defaults to 'true')
+    type: boolean
+    default: true
   install-postgresql-client:
     description: controls installation of the postgresql-client package (Defaults to 'true')
     type: boolean
@@ -134,6 +138,10 @@ steps:
                 echo
                 exit 1
               fi
+  - when:
+      condition: << parameters.update-package-index >>
+      steps:
+        - update-package-index
   - when:
       condition: << parameters.install-postgresql-client >>
       steps:
