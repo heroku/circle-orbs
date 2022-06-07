@@ -2,4 +2,4 @@ version: 2.1
 description: |
   snyk orb
 orbs:
-  snyk: snyk/snyk@0.0.8
+  snyk: snyk/snyk@1.1.2
